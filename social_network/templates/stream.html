@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+{% for post in stream[::-1] %}
+    <article>
+        <h2 style="color:black;font-family: Times New Roman;"><b><i>
+            <a href="{{ url_for('stream', username=post.user.username) }}">{{ post.user.username }}</a>
+        </i></b></h2>
+        <i class="clock" ></i><time data-time="{{ post.timestamp.timestamp() }}" class="distime" style="color:black;" datetime="{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}">{{ post.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</time> 
+        <br><br>
+        <div class="post" style="color:black;font-family: Lucida Console; font-size:1.3em;">
+            {{ post.content }}
+        </div>
+        <a href="{{ url_for('view_post', post_id=post.id) }}" class="view">View</a>
+        {% if current_user.is_authenticated %}
+        {% if post.user.username==current_user.username %}
+        <a href="{{ url_for('delete_post', post_id=post.id) }}" class="delete">Delete</a>
+        {% endif %}
+        {% endif %}
+        
+    </article>
+{% endfor %}
+{% endblock %}
